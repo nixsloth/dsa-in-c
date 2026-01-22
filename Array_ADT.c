@@ -3,7 +3,7 @@
 
 typedef struct {
     int *data;
-    int size;
+    int capacity;
     int used;
 } Array;
 
@@ -15,12 +15,16 @@ void set(Array *, int, int); //Sets value at given index or replaces existing va
 int get(Array *, int);
 
 int main() {
-    int size;
-    // printf("Enter the size of the new array: ");
-    // scanf("%d", &size);
-    size = 5;
+    int capacity;
+    // printf("Enter the capacity of the new array: ");
+    // scanf("%d", &capacity);
+    capacity = 5;
     Array *arr = malloc(sizeof(Array));
-    create(arr, size);
+    if(arr == NULL) {
+        printf("Memory allocation failed.");
+        exit(1);
+    }
+    create(arr, capacity);
     insert(arr, arr->used, 11);
     insert(arr, arr->used, 22);
     insert(arr, arr->used, 33);
@@ -29,21 +33,23 @@ int main() {
     delete(arr, 2);
     traverse(arr);
     get(arr, 2);
-
     free(arr->data);
     free(arr);
-
     return 0;
 }
 
-void create(Array *arr, int size) {
-    if (size <= 0) {
-        printf("Invalid size for array.\n");
-        return;
+void create(Array *arr, int capacity) {
+    if (capacity <= 0) {
+        printf("Invalid capacity for array.\n");
+        exit(1);
     }
-    arr->size = size;
+    arr->capacity = capacity;
     arr->used = 0;
-    arr->data = malloc(size * sizeof(int));
+    arr->data = malloc(capacity * sizeof(int));
+    if(arr->data == NULL) {
+        printf("Memory allocation failed.");
+        exit(1);
+    }
 }
 
 void traverse(Array *arr) {
@@ -61,12 +67,12 @@ void traverse(Array *arr) {
 }
 
 void insert(Array *arr, int index, int value) {
-    if(arr->used >= arr->size) {
+    if(arr->used >= arr->capacity) {
         printf("Array capacity is full. Insertion failed.\n");
         return;
     }
     else if(index > arr->used || index < 0) {
-        printf("Given index is invalid.\n");
+        printf("Given index is out of bounds.\n");
         return;
     }
     else {
