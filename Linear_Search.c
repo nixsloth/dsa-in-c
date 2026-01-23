@@ -1,4 +1,4 @@
-//If a search value has duplicate occurrences in the array, it returns only the first occurance.
+//If a search value has duplicate occurrences in the array, it returns only the first occurrence.
 
 #include <stdio.h>
 
